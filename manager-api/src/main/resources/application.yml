@@ -29,15 +29,6 @@ spring:
     admin:
       client:
         url: http://127.0.0.1:8000
-  # mongodb
-  data:
-    mongodb:
-      uri: 127.0.0.1:27017
-      database: lilishop
-      username: root
-      password: lilishop
-      authentication-database: admin
-  #      replica-set-name: mongoreplset
   cache:
     type: redis
   # Redis
@@ -117,7 +108,7 @@ spring:
     props:
       #是否打印逻辑SQL语句和实际SQL语句，建议调试时打印，在生产环境关闭
       sql:
-        show: true
+        show: false
 
 # 忽略鉴权url
 ignored:
@@ -128,9 +119,10 @@ ignored:
     - /MP_verify_qSyvBPhDsPdxvOhC.txt
     - /weixin/**
     - /source/**
-    - /manager/user/login
-    - /manager/user/refresh/**
-    - /manager/elasticsearch
+    - /manager/passport/user/login
+    - /manager/passport/user/refresh/**
+    - /manager/other/elasticsearch
+    - /manager/other/customWords
     - /druid/**
     - /swagger-ui.html
     - /doc.html
@@ -173,7 +165,6 @@ logging:
     cn.lili: info
   #    org.hibernate: debug
   #    org.springframework: debug
-  #    org.springframework.data.mongodb.core: debug
   file:
     # 指定路径
     path: lili-logs
@@ -191,6 +182,11 @@ jasypt:
 lili:
   system:
     isDemoSite: true
+    #     脱敏级别：
+    #     0：不做脱敏处理
+    #     1：管理端用户手机号等信息脱敏
+    #     2：商家端信息脱敏（为2时，表示管理端，商家端同时脱敏）
+    sensitiveLevel: 1
   statistics:
     # 在线人数统计 X 小时。这里设置48，即统计过去48小时每小时在线人数
     onlineMember: 48

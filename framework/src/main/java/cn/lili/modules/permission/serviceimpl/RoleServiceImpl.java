@@ -23,7 +23,6 @@ import java.util.List;
  * @since 2020/11/17 3:50 下午
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     /**
@@ -48,6 +47,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteRoles(List<String> roleIds) {
         QueryWrapper queryWrapper = new QueryWrapper<>();
         queryWrapper.in("role_id", roleIds);

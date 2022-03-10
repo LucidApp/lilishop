@@ -20,7 +20,6 @@ import java.util.List;
  * @since 2020-02-18 16:18:56
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class CategoryBrandServiceImpl extends ServiceImpl<CategoryBrandMapper, CategoryBrand> implements CategoryBrandService {
 
     @Override
@@ -39,6 +38,7 @@ public class CategoryBrandServiceImpl extends ServiceImpl<CategoryBrandMapper, C
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveCategoryBrandList(String categoryId, List<String> brandIds) {
         //删除分类品牌绑定信息
         this.deleteByCategoryId(categoryId);

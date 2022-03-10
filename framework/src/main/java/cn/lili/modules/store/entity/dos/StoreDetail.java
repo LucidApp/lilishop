@@ -8,7 +8,6 @@ import cn.lili.common.validation.Phone;
 import cn.lili.modules.store.entity.dto.AdminStoreApplyDTO;
 import cn.lili.mybatis.BaseIdEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
@@ -37,11 +36,6 @@ import java.util.Date;
 public class StoreDetail extends BaseIdEntity {
 
     private static final long serialVersionUID = 4949782642253898816L;
-
-    @TableId
-    @TableField
-    @ApiModelProperty(value = "唯一标识", hidden = true)
-    private String id;
 
     @NotBlank(message = "店铺不能为空")
     @ApiModelProperty(value = "店铺id")
@@ -98,7 +92,6 @@ public class StoreDetail extends BaseIdEntity {
     @ApiModelProperty(value = "营业执照号")
     private String licenseNum;
 
-    @Size(min = 1, max = 200, message = "法定经营范围长度为1-200位字符")
     @ApiModelProperty(value = "法定经营范围")
     private String scope;
 
@@ -183,28 +176,9 @@ public class StoreDetail extends BaseIdEntity {
 
     public StoreDetail(Store store, AdminStoreApplyDTO adminStoreApplyDTO) {
         this.storeId = store.getId();
-        //过滤字段值
-        isNotNull(adminStoreApplyDTO);
         //设置店铺公司信息、设置店铺银行信息、设置店铺其他信息
         BeanUtil.copyProperties(adminStoreApplyDTO, this);
         this.settlementDay = DateUtil.date();
         this.stockWarning = 10;
     }
-
-    public void isNotNull(AdminStoreApplyDTO adminStoreApplyDTO){
-        if("null".equals(adminStoreApplyDTO.getSalesConsigneeName())){
-            adminStoreApplyDTO.setSalesConsigneeName("");
-        }
-        if("null".equals(adminStoreApplyDTO.getSalesConsigneeMobile())){
-            adminStoreApplyDTO.setSalesConsigneeMobile("");
-        }
-        if("null".equals(adminStoreApplyDTO.getSalesConsigneeDetail())){
-            adminStoreApplyDTO.setSalesConsigneeDetail("");
-        }
-        if("null".equals(adminStoreApplyDTO.getDdCode())){
-            adminStoreApplyDTO.setDdCode("");
-        }
-    }
-
-
 }

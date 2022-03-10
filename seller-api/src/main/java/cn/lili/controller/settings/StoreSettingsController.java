@@ -27,7 +27,7 @@ import javax.validation.Valid;
  */
 @RestController
 @Api(tags = "店铺端,店铺设置接口")
-@RequestMapping("/store/settings")
+@RequestMapping("/store/settings/storeSettings")
 public class StoreSettingsController {
 
     /**
@@ -53,6 +53,14 @@ public class StoreSettingsController {
     public ResultMessage<Object> edit(@Valid StoreSettingDTO storeSettingDTO) {
         //修改商家设置
         Boolean result = storeDetailService.editStoreSetting(storeSettingDTO);
+        return ResultUtil.data(result);
+    }
+
+    @ApiOperation(value = "修改商家设置")
+    @PutMapping("/merchantEuid")
+    public ResultMessage<Object> edit(String merchantEuid) {
+        //修改UDESK设置
+        Boolean result = storeDetailService.editMerchantEuid(merchantEuid);
         return ResultUtil.data(result);
     }
 

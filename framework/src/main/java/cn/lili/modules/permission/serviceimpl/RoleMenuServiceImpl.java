@@ -26,7 +26,6 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 
     /**
@@ -59,6 +58,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateRoleMenu(String roleId, List<RoleMenu> roleMenus) {
         try {
             //删除角色已经绑定的菜单

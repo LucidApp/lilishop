@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +33,6 @@ import java.util.Objects;
  * @since 2020-03-24 23:04:56
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class DistributionGoodsServiceImpl extends ServiceImpl<DistributionGoodsMapper, DistributionGoods> implements DistributionGoodsService {
 
     /**
@@ -68,6 +66,38 @@ public class DistributionGoodsServiceImpl extends ServiceImpl<DistributionGoodsM
         }
         //如果是平台则直接进行查询
         return this.baseMapper.getDistributionGoodsVO(PageUtil.initPage(searchParams), searchParams.distributionQueryWrapper());
+    }
+
+    /**
+     * 根据条件查询分销商品信息列表
+     *
+     * @param distributionGoodsSearchParams 商品条件
+     * @return 分销商品信息列表
+     */
+    @Override
+    public List<DistributionGoods> getDistributionGoodsList(DistributionGoodsSearchParams distributionGoodsSearchParams) {
+        return this.list(distributionGoodsSearchParams.queryWrapper());
+    }
+
+    /**
+     * 根据条件查询分销商品信息
+     *
+     * @param distributionGoodsSearchParams 条件
+     * @return 分销商品信息
+     */
+    @Override
+    public DistributionGoods getDistributionGoods(DistributionGoodsSearchParams distributionGoodsSearchParams) {
+        return this.getOne(distributionGoodsSearchParams.queryWrapper(), false);
+    }
+
+    /**
+     * 根据条件删除分销商品
+     *
+     * @param distributionGoodsSearchParams 条件
+     */
+    @Override
+    public boolean deleteDistributionGoods(DistributionGoodsSearchParams distributionGoodsSearchParams) {
+        return this.remove(distributionGoodsSearchParams.queryWrapper());
     }
 
     @Override

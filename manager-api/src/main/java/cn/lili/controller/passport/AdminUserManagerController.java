@@ -1,5 +1,6 @@
 package cn.lili.controller.passport;
 
+import cn.lili.common.aop.annotation.DemoSite;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.exception.ServiceException;
@@ -17,8 +18,7 @@ import cn.lili.modules.permission.entity.dto.AdminUserDTO;
 import cn.lili.modules.permission.entity.vo.AdminUserVO;
 import cn.lili.modules.permission.service.AdminUserService;
 import cn.lili.modules.permission.service.DepartmentService;
-import cn.lili.modules.system.aspect.annotation.DemoSite;
-import cn.lili.modules.verification.enums.VerificationEnums;
+import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
 import cn.lili.mybatis.util.PageUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -27,7 +27,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +44,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(tags = "管理员")
-@RequestMapping("/manager/user")
-@Transactional(rollbackFor = Exception.class)
+@RequestMapping("/manager/passport/user")
 @Validated
 public class AdminUserManagerController {
     @Autowired
@@ -62,7 +60,7 @@ public class AdminUserManagerController {
     @Autowired
     private VerificationService verificationService;
 
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     @ApiOperation(value = "登录管理员")
     public ResultMessage<Token> login(@NotNull(message = "用户名不能为空") @RequestParam String username,
                                       @NotNull(message = "密码不能为空") @RequestParam String password,

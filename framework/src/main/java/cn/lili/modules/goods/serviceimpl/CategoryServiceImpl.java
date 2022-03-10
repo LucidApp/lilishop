@@ -6,10 +6,7 @@ import cn.lili.cache.CachePrefix;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.exception.ServiceException;
 import cn.lili.modules.goods.entity.dos.Category;
-import cn.lili.modules.goods.entity.dos.CategoryParameterGroup;
 import cn.lili.modules.goods.entity.vos.CategoryVO;
-import cn.lili.modules.goods.entity.vos.GoodsParamsGroupVO;
-import cn.lili.modules.goods.entity.vos.GoodsParamsVO;
 import cn.lili.modules.goods.mapper.CategoryMapper;
 import cn.lili.modules.goods.service.CategoryBrandService;
 import cn.lili.modules.goods.service.CategoryParameterGroupService;
@@ -25,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
  * @since 2020-02-23 15:18:56
  */
 @Service
-@Transactional(rollbackFor = Exception.class)
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     private static final String DELETE_FLAG_COLUMN = "delete_flag";
@@ -58,6 +57,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public List<Category> dbList(String parentId) {
         return this.list(new LambdaQueryWrapper<Category>().eq(Category::getParentId, parentId));
+    }
+
+    @Override
+    public Category getCategoryById(String id) {
+        return this.getById(id);
     }
 
     /**
@@ -195,6 +199,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveCategory(Category category) {
         //判断分类佣金是否正确
         if (category.getCommissionRate() < 0) {
@@ -211,6 +216,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateCategory(Category category) {
         //判断分类佣金是否正确
         if (category.getCommissionRate() < 0) {
@@ -236,6 +242,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(String id) {
         this.removeById(id);
         removeCache();
@@ -246,6 +253,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateCategoryStatus(String categoryId, Boolean enableOperations) {
         //禁用子分类
         CategoryVO categoryVO = new CategoryVO(this.getById(categoryId));
@@ -297,34 +305,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         if (!categoryVOList.isEmpty()) {
             categoryVOList.forEach(this::findAllChild);
         }
-    }
-
-    /**
-     * 拼装返回值
-     *
-     * @param paramList 参数列表
-     * @return 拼装后的返回值
-     */
-    private List<GoodsParamsGroupVO> convertParamList(List<CategoryParameterGroup> groupList, List<GoodsParamsVO> paramList) {
-        Map<String, List<GoodsParamsVO>> map = new HashMap<>(16);
-        for (GoodsParamsVO param : paramList) {
-            if (map.get(param.getGroupId()) != null) {
-                map.get(param.getGroupId()).add(param);
-            } else {
-                List<GoodsParamsVO> list = new ArrayList<>();
-                list.add(param);
-                map.put(param.getGroupId(), list);
-            }
-        }
-        List<GoodsParamsGroupVO> resList = new ArrayList<>();
-        for (CategoryParameterGroup group : groupList) {
-            GoodsParamsGroupVO list = new GoodsParamsGroupVO();
-            list.setGroupName(group.getGroupName());
-            list.setGroupId(group.getId());
-            list.setParams(map.get(group.getId()));
-            resList.add(list);
-        }
-        return resList;
     }
 
     /**

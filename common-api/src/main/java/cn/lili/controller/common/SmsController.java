@@ -4,8 +4,8 @@ import cn.lili.cache.limit.annotation.LimitPoint;
 import cn.lili.common.enums.ResultCode;
 import cn.lili.common.enums.ResultUtil;
 import cn.lili.common.vo.ResultMessage;
-import cn.lili.modules.system.sms.SmsUtil;
-import cn.lili.modules.verification.enums.VerificationEnums;
+import cn.lili.modules.sms.SmsUtil;
+import cn.lili.modules.verification.entity.enums.VerificationEnums;
 import cn.lili.modules.verification.service.VerificationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Api(tags = "短信验证码接口")
-@RequestMapping("/common/sms")
+@RequestMapping("/common/common/sms")
 public class SmsController {
 
     @Autowired
